@@ -2,92 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.slick-slider{
-  position: relative;
+.card{
+  @apply mb-5 block rounded-lg border border-gray-200 shadow-md h-max
 }
 
-.slick-arrow{
-    position:absolute !important;
-    display: none !important;
-}
-.slick-preview{
-left: 20px !;
-position:absolute !important;
-border: 3px solid purple !important;
-}
-
-.slick-next{
-    right: 20px;
-    position:absolute !important;
-    border: 3px solid purple !important;
-}
-@media  screen and (max-width:768px){
-  
- 
-.myRow{
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center;
-  row-gap: 0.5rem !important;
-  margin-bottom: 2.5rem;
-  
-}
-
-
-.price::before{
-content: "Price: ";
-font-size: large;
-color: #000000;
-font-weight: bolder;
-}
-
-.quantity::before{
-  content: "Qunatity: ";
-  font-size: large;
-  color: black;
-  font-weight: bolder;
-}
-
-.total::before{
-  content: "Total: ";
-  font-size: large;
-  color: black;
-  font-weight: bolder;
-}
-img{
-  width: 120px !important;
-  height: 100px !important;
-}
-}
-
-/* for the order component */
-
-@keyframes processAnimate {
-  from{
-    opacity: 1;
-  }
-  to{
-  opacity: 0;
-  }
-}
- 
-.processing{
-  font-size: 3rem;
-  animation: processAnimate 1s ease infinite alternate;
-}
-
-.progress{
-  opacity:0.2
-}
-
-.delivered{
-  opacity: 0.2;
-}
-
-.progress{
-  font-size: 3rem;
-}
-
-.delivered{
-  font-size: 3rem;
+.primary-button{
+  @apply rounded bg-amber-300
+  px-4 py-2 shadow outline-none hover:bg-amber-400 active:bg-amber-500 
 }
