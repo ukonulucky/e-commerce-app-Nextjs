@@ -1,9 +1,14 @@
 import React from 'react';
 import Head from "next/head"
-import Link from 'next/link';
+
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
+import Header from './Header';
 
 function Layout({children, title}){
+   
     return (
+        <Provider store={store}>
         <div className='flex flex-col justify-between min-h-screen'>
             <Head>
                 <title>{title ? title - "Store" :"Home Page,"}</title>
@@ -11,21 +16,7 @@ function Layout({children, title}){
 
             </Head>
            <header>
-           <nav className='flex justify-between px-4 items-center shadow-md h-12'>
-            <Link href="">
-                <a className='font-bold lowercase'>
-                Amazona
-                </a>
-            </Link>
-            <div className=''>
-            <Link href='' >
-             <a className='px-2 capitalize text-lg' >cart</a>
-             </Link>
-             <Link href='' >
-             <a className='px-2 capitalize text-lg' >Login</a>
-             </Link>
-            </div>
-           </nav>
+           <Header />
            </header>
            <main className='container m-auto mt-4 p-4'>
             {children}
@@ -36,6 +27,7 @@ function Layout({children, title}){
             </p>
            </footer>
         </div>
+        </Provider>
     )
 }
 

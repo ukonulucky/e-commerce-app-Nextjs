@@ -2,15 +2,33 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addCart } from '../../redux/userSlice'
 
 import data from '../../utils/data'
 
 function ProductScreen() {
     const router = useRouter()
  const { id } = router.query
+ const dispatch  = useDispatch()  
+ const cart = useSelector(state => state.user.cart)
+ 
 
  const productEle = data.products.find(i => i.slug === id)
+const addToCart = (item) => {
+const itemIndex = cart.findIndex(i => i.slug === item.slug)
+console.log("this is the quantity",cart[itemIndex]?.quantity)
+console.log("this is the countInStock",cart[itemIndex]?.countInStock)
 
+if(parseFloat(cart[itemIndex]?.quantity) === parseFloat( cart[itemIndex]?.countInStock)){
+  alert("Item not remaining in cart")
+  router.push("/cart")
+  return
+}
+     dispatch(addCart(item))
+     router.push("/cart")
+
+}
  
  const productComp = function(){
     console.log(productEle)
@@ -67,7 +85,11 @@ function ProductScreen() {
               </div>
              
             </div>
-            <button className='primary-button w-full'>
+            <button className='primary-button w-full'
+            onClick={
+              () => addToCart(productEle)
+            
+            }>
                 Add to cart
               </button>
          </div>
