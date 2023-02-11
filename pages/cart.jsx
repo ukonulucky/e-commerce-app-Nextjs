@@ -2,14 +2,27 @@ import Image from "next/image";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {TiDeleteOutline} from "react-icons/ti"
-import { removeCart } from "../redux/userSlice";
+import { removeCart, updateQuntity } from "../redux/userSlice";
+import { useRouter } from "next/router";
+
+
 
 function cart() {
+
+  const router = useRouter()
   const cart = useSelector((state) => state.user.cart);
      const dispatch = useDispatch()
 
      const removeProductHandler = (product) => {
         dispatch(removeCart(product))
+     }
+     const handleQuantity =(product,newQuantity) => {
+      console.log(newQuantity)
+      const updatedProduct = {
+        ...product,quantity:parseInt(newQuantity)
+      } 
+      dispatch( updateQuntity(updatedProduct))
+
      }
   return (
     <div>
@@ -55,7 +68,22 @@ function cart() {
                                 <td className="font-bold text-right min-w-full h-full py-4"
                             
                                 >
-                                    {i.quantity}
+                                    <select name="" id="" value={i.quantity}
+                                    
+                                    onChange= {
+                                      (e) => {
+                                        handleQuantity(i, e.target.value)
+                                      }
+                                    }>
+                                     {
+                                     [... Array(i.countInStock).keys()].map((i,k)=> {
+                                     return  <option value={i + 1} key={k}>
+                                        {i + 1}
+                                      </option>
+                                     })
+                                     }
+
+                                    </select>
                                 </td >
                                 <td className="font-bold text-right min-w-full h- full py-4">
                                     {i.price}
@@ -79,7 +107,10 @@ function cart() {
            <p className="mb-3"><span className="font-bold text-lg">Subtotal</span>{"  "}({
             cart.length}): {"  "}${
             cart.reduce((acc, inc) => acc + (inc.price * inc.quantity),0 )}</p>
-            <button className="primary-button min-w-full">
+            <button className="primary-button min-w-full"
+            onClick={() => {
+              router.push("login?redirect=/shipping")
+            }}>
                 Check Out
             </button>
         </div>

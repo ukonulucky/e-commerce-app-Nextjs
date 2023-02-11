@@ -1,6 +1,8 @@
+
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import React from "react";
+import dynamic from "next/dynamic";
 
 function ProductItem({ product }) {
   return (
@@ -30,4 +32,6 @@ function ProductItem({ product }) {
   );
 }
 
-export default ProductItem;
+export default dynamic(() => Promise.resolve(ProductItem, {
+  ssr: false
+}));

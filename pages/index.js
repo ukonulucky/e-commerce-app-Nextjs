@@ -1,3 +1,4 @@
+
 import ProductItem from "../components/ProductItem";
 import data from "../utils/data";
 
@@ -10,8 +11,6 @@ export default function Home() {
         <ProductItem product={product}  key={id} />
       ))
     }
-
-    
    </div>
  
     )
