@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from "next/head"
-
+import {ToastContainer} from "react-toastify"
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
 import Header from './Header';
@@ -18,6 +18,7 @@ function Layout({children, title}){
            <header>
            <Header />
            </header>
+           <ToastContainer position="top-right" limit={1} />
            <main className='container m-auto mt-4 p-4'>
             {children}
            </main>

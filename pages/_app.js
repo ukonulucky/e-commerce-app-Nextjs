@@ -1,12 +1,16 @@
 
+import { SessionContext, SessionProvider } from 'next-auth/react'
 import Layout from '../components/Layout'
+import 'react-toastify/dist/ReactToastify.min.css'
 import '../styles/globals.css'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: {session, ...pageProps} }) {
   return (
+    <SessionProvider session={session}>
         <Layout>
          <Component {...pageProps} />
       </Layout>
+  </SessionProvider>
     
   )
 }

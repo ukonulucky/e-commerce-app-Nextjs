@@ -1,6 +1,8 @@
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 import { useSelector } from 'react-redux'
+
 
 function Header() {
     const cart = useSelector(state => state.user.cart)
@@ -8,6 +10,8 @@ function Header() {
  const totalItem = cart.reduce((acc, cur) => {
   return acc + cur.quantity
  }, 0)
+
+ const {status, data:session} = useSession()
 
   return (
     <div>
@@ -24,9 +28,13 @@ function Header() {
                 <span className='ml-1 py-1 px-2 bg-red-600 rounded-full text-xs text-white font-bold'>{totalItem ? totalItem : 0}</span>
                 </a>
              </Link>
-             <Link href='login?redirect=/shipping' >
-             <a className='px-2 capitalize text-lg' >Login</a>
-             </Link>
+             {
+              status === "loading" ? 'Loading' : (
+                session?.user.name ? session.user.name : <Link href='login?redirect=/shipping' >
+                <a className='px-2 capitalize text-lg' >Login</a>
+                </Link>
+              )
+             }
             </div>
            </nav>
     </div>
