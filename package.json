@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.10",
     "@reduxjs/toolkit": "^1.9.2",
     "axios": "^1.2.6",
     "bcrypt": "^5.1.0",

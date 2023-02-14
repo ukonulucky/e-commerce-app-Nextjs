@@ -3,6 +3,7 @@ import Head from "next/head"
 import {ToastContainer} from "react-toastify"
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
+
 import Header from './Header';
 
 function Layout({children, title}){
@@ -11,7 +12,7 @@ function Layout({children, title}){
         <Provider store={store}>
         <div className='flex flex-col justify-between min-h-screen'>
             <Head>
-                <title>{title ? title - "Store" :"Home Page,"}</title>
+                <title>{title ? title - "Store" :"Home Page"}</title>
                 <meta name="description" content="E-commerce website page" />
 
             </Head>

@@ -3,13 +3,13 @@ const data = {
     users:[
         {
             name:"john",
-            email:"ama49@gmail.com",
+            email:"lucky@gmail.com",
             password: "1234567",
             isAdmin:true
         },
         {
-            name:"frnak",
-            email:"ama41gmail.com",
+            name:"frank",
+            email:"lucky1@gmail.com",
             password: "1234567",
             isAdmin:true
         }

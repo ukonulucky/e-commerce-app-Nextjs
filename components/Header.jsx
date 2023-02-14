@@ -1,10 +1,17 @@
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import {Menu} from "@headlessui/react"
+import DropdownLink from './DropdownLink'
+import { reset } from '../redux/userSlice'
+
+
 
 
 function Header() {
+
+  const dispatch = useDispatch()
     const cart = useSelector(state => state.user.cart)
 
  const totalItem = cart.reduce((acc, cur) => {
@@ -12,6 +19,17 @@ function Header() {
  }, 0)
 
  const {status, data:session} = useSession()
+ console.log('this is the session', status, session)
+
+ const handleLogOut = () => {
+  console.log("handleLogOut ran")
+  localStorage.removeItem("cart")
+  dispatch(reset())
+
+  signOut({
+    callbackUrl:"/login"
+  })
+ }
 
   return (
     <div>
@@ -30,7 +48,36 @@ function Header() {
              </Link>
              {
               status === "loading" ? 'Loading' : (
-                session?.user.name ? session.user.name : <Link href='login?redirect=/shipping' >
+                session?.user.name ?
+                <Menu as="div" className="relative inline-block">
+                   <Menu.Button className="text-blue-600 outline-none">
+                   {session.user.name}
+                   </Menu.Button>
+                   <Menu.Items  className="absolute origin-top-right bg-white right-0
+                   w-56 shadow-lg outline-none">
+                    <Menu.Item as="div" >
+                      <DropdownLink href="/profile" className="dropdown-link">
+                        Profile
+                      </DropdownLink>
+                      </Menu.Item>
+                      <Menu.Item>
+                      <DropdownLink href="/order history" className="dropdown-link">
+                        Order History
+                      </DropdownLink>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <a className='dropdown-link'
+                        onClick={handleLogOut}
+                        >
+                          LogOut
+                        </a>
+                      </Menu.Item>
+                     
+                   
+ 
+                   </Menu.Items>
+                </Menu>
+                : <Link href='login?redirect=/shipping' >
                 <a className='px-2 capitalize text-lg' >Login</a>
                 </Link>
               )

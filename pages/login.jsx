@@ -13,9 +13,8 @@ function login() {
     const {data: session} = useSession()
 
     useEffect(() => {
-        console.log("this is session",session)
   if(session?.user){
-    router.push(redirect || "/")
+     router.push(redirect || "/")
   }
     },[ router, redirect,session])
     const {
@@ -24,13 +23,14 @@ register,
 formState: {errors}
 
     } = useForm()
-    const submitForm =async (email,password) => {
+    const submitForm =async (data) => {
       try {
-        console.log(email,password)
+        console.log(data)
+        
         const res = await signIn("credentials",{
             redirect:false,
-            email,
-            password
+            email: data.email,
+            password: data.password
         })
         if(res.error){
             toast.error(res.error.message)
@@ -69,7 +69,7 @@ formState: {errors}
               </div>
                 }
             </div>
-            <div className="mb-4">
+            <div className="mb-4"> 
                 <label htmlFor="password">Password</label>
                 <div className='mb-2'>
                 <input type="password" name="password" id="password" className='w-1/2 block' 
