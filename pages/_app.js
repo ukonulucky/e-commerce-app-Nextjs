@@ -7,13 +7,17 @@ import { useRouter } from 'next/router'
 
 function MyApp({ Component, pageProps: {session, ...pageProps} }) {
   const router = useRouter()
-
+console.log("this is the session", session)
   return (
     <SessionProvider session={session}>
         <Layout>
          {
           Component.auth ? (
+            
             <Auth>
+              {
+                 console.log("auth component")
+              }
               <Component {...pageProps} />
             </Auth>
           ):
@@ -29,8 +33,9 @@ function MyApp({ Component, pageProps: {session, ...pageProps} }) {
 }
  function Auth({children}) {
   const router = useRouter();
+
   const {status}   = useSession({
-    require: true, 
+    required: true, 
     onUnauthenticated(){
       console.log("code ran in auth 22")
       router.push("/unauthorised?message=login required")

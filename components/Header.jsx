@@ -19,8 +19,6 @@ function Header() {
  }, 0)
 
  const {status, data:session} = useSession()
- console.log('this is the session', status, session)
-
  const handleLogOut = () => {
   console.log("handleLogOut ran")
   localStorage.removeItem("cart")

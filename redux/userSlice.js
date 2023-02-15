@@ -9,12 +9,15 @@ const userSlice = createSlice({
       typeof window !== "undefined" && localStorage.getItem("cart")
         ? JSON.parse(localStorage.getItem("cart"))
         : [],
-        shoppingAddress:
+        shippingAddress:
             typeof window !== "undefined" && localStorage.getItem("shippingAddress")
         ? JSON.parse(localStorage.getItem("shippingAddress"))
         : {
-            location: {}
+            location: ""
         },
+        paymentMethod: typeof window !== "undefined" && localStorage.getItem("paymentMethod")
+        ? JSON.parse(localStorage.getItem("paymentMethod"))
+        : "",
     balance: 0,
     erorr: false,
     pending: null,
@@ -75,21 +78,24 @@ const userSlice = createSlice({
     saveShippingAddress: (state, action) => {
         console.log("comig from store", action.payload)
 
-           state.shoppingAddress.location = action.payload
+           state.shippingAddress.location = action.payload
 
-           console.log("comig from store2", state.shoppingAddress.location)
-           localStorage.setItem("shippingAddress", JSON.stringify(state.shoppingAddress))
+           console.log("comig from store2", state.shippingAddress.location)
+           localStorage.setItem("shippingAddress", JSON.stringify(state.shippingAddress))
     }
     ,
     updateQuntity: (state, action) => {
       const index = state.cart.findIndex((i) => i.slug === action.payload.slug);
-      console.log(index);
       state.cart.splice(index, 1, action.payload);
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
+    savePaymentMethod:(state, action) => {
+     state.paymentMethod = action.payload
+     localStorage.setItem("paymentMethod", JSON.stringify(state.paymentMethod));
+    }
   },
 });
 
-export const { addCart, removeCart, updateQuntity,reset, saveShippingAddress } = userSlice.actions;
+export const { addCart, removeCart, updateQuntity,reset, saveShippingAddress, savePaymentMethod } = userSlice.actions;
 
 export default userSlice.reducer;

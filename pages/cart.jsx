@@ -4,25 +4,33 @@ import { useDispatch, useSelector } from "react-redux";
 import {TiDeleteOutline} from "react-icons/ti"
 import { removeCart, updateQuntity } from "../redux/userSlice";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import db from "../utils/db";
+import productModel from "../models/Product";
 
 
 
-function cart() {
-
+  function cart({productServer}) {
+    console.log("this is the product", productServer[0]?.countInStock)
   const router = useRouter()
   const cart = useSelector((state) => state.user.cart);
      const dispatch = useDispatch()
 
      const removeProductHandler = (product) => {
         dispatch(removeCart(product))
+        toast.success("Product deleted successfully")
      }
      const handleQuantity =(product,newQuantity) => {
-      console.log(newQuantity)
       const updatedProduct = {
         ...product,quantity:parseInt(newQuantity)
       } 
+      if(updatedProduct.quantity > productServer[0]?.countInStock){
+        toast.success("Product not available in stock")
+        return
+      }
       dispatch( updateQuntity(updatedProduct))
 
+      toast.success("Product quantity update successful")
      }
   return (
     <div>
@@ -123,3 +131,17 @@ function cart() {
 }
 
 export default cart;
+
+export const getServerSideProps = async (context) => {
+     const { slug } = context.query
+     await db.connect()
+     const productServer = await productModel.find({
+      slug
+     }).lean()
+     return {
+   props:{
+    productServer : productServer ? productServer.map(i => db.converDocToObject(i)) : null
+   }
+     }
+     
+}

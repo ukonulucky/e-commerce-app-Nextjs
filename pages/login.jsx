@@ -40,20 +40,20 @@ formState: {errors}
       }
     }
   return (
-    <div>
+    <div className='w-full flex justify-center items-center'>
     <Head>
         <title>Login</title>
     </Head>
-        <form className='mx-auto max-w-screen-md  border-red-500 '
+        <form className=' mx-auto max-w-screen-md w-full '
         onSubmit={handleSubmit(submitForm)}
         >
             <h1 className="mb-4 text-xl">
                 Login
             </h1>
-            <div className="mb-4">
+            <div className="mb-4 mx-auto">
                 <label htmlFor="email">Email</label>
               <div className="mb-2">
-              <input type="email" name="email" id="email" className='block  w-1/2'
+              <input type="email" name="email" id="email" className='block  w-2/3'
               {...register("email", {
                 required: "Email field is required",
                 pattern:{
@@ -72,7 +72,7 @@ formState: {errors}
             <div className="mb-4"> 
                 <label htmlFor="password">Password</label>
                 <div className='mb-2'>
-                <input type="password" name="password" id="password" className='w-1/2 block' 
+                <input type="password" name="password" id="password" className='w-2/3 block' 
                 {
                     ...register("password", {
                         required:"Password is required",
@@ -83,6 +83,7 @@ formState: {errors}
                     })
                 }
                 />
+        
                 </div>
                 {errors.password && 
                     <div className='text-red-600'>

@@ -1,18 +1,20 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import CheckoutWizard from "../components/CheckoutWizard";
-import Layout from "../components/Layout";
 import { saveShippingAddress } from "../redux/userSlice";
 
 export default function Shipping() {
+  const router = useRouter()
     const dispatch = useDispatch()
     const handleSubmitHandler = (data) => {
-        console.log(data)
       dispatch(saveShippingAddress(data))
+      console.log("code 44 ran")
+        router.push("/payment")
     }
-  const userAddress = useSelector(state => state.user.shoppingAddress.location)
+  const userAddress = useSelector(state => state.user.shippingAddress.location)
   const {
     handleSubmit,
     register,
@@ -33,6 +35,7 @@ export default function Shipping() {
 
   useEffect(() => {
         populateFormFields()
+     
   }, [userAddress])
 
 
