@@ -37,7 +37,6 @@ console.log("this is the session", session)
   const {status}   = useSession({
     required: true, 
     onUnauthenticated(){
-      console.log("code ran in auth 22")
       router.push("/unauthorised?message=login required")
     }
   })
@@ -46,7 +45,6 @@ console.log("this is the session", session)
       Loading...
     </div>
   }
-  console.log("code ran in auth")
   return children
  }
 export default MyApp

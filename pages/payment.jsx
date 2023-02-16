@@ -21,6 +21,7 @@ function payment() {
   dispatch(savePaymentMethod(selectedPaymentMethod))
     console.log('this is',selectedPaymentMethod)
     toast.success("payment  method successful")
+    router.push("/placeorder")
 
    }
     
@@ -82,3 +83,4 @@ function payment() {
 }
 
 export default payment
+payment.auth = true

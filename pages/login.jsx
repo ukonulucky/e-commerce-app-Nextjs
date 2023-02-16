@@ -32,8 +32,8 @@ formState: {errors}
             email: data.email,
             password: data.password
         })
-        if(res.error){
-            toast.error(res.error.message)
+        if(res.status !== 200){
+            toast.error("invalid login credentials")
         }
       } catch (error) {
         toast.error(getError(error))

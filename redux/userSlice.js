@@ -4,7 +4,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    userInfo: "",
     cart:
       typeof window !== "undefined" && localStorage.getItem("cart")
         ? JSON.parse(localStorage.getItem("cart"))
@@ -92,10 +91,15 @@ const userSlice = createSlice({
     savePaymentMethod:(state, action) => {
      state.paymentMethod = action.payload
      localStorage.setItem("paymentMethod", JSON.stringify(state.paymentMethod));
+    },
+    clearCart : (state) => {
+      console.log("clearCart ran")
+           localStorage.removeItem("cart")
+          state.cart = []
     }
   },
 });
 
-export const { addCart, removeCart, updateQuntity,reset, saveShippingAddress, savePaymentMethod } = userSlice.actions;
+export const { clearCart, addCart, removeCart, updateQuntity,reset, saveShippingAddress, savePaymentMethod } = userSlice.actions;
 
 export default userSlice.reducer;
