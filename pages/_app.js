@@ -4,13 +4,15 @@ import Layout from '../components/Layout'
 import 'react-toastify/dist/ReactToastify.min.css'
 import '../styles/globals.css'
 import { useRouter } from 'next/router'
+import { PayPalScriptProvider } from '@paypal/react-paypal-js'
 
 function MyApp({ Component, pageProps: {session, ...pageProps} }) {
   const router = useRouter()
 console.log("this is the session", session)
   return (
     <SessionProvider session={session}>
-        <Layout>
+      <PayPalScriptProvider deferLoading={true}>
+      <Layout>
          {
           Component.auth ? (
             
@@ -27,6 +29,7 @@ console.log("this is the session", session)
 
          }
       </Layout>
+      </PayPalScriptProvider>
   </SessionProvider>
     
   )

@@ -41,7 +41,7 @@ const placeOrderHandler = async (state) => {
     })
     setLoading(false)
     dispatch(clearCart())
-    router.push(`api/orders/${data._id}`)
+    router.push(`/orders/${data._id}`)
 
    } catch (error) {
     setLoading(false)
