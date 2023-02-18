@@ -3,7 +3,6 @@ import db from "../../../utils/db";
 
 
 const handler = async (req, res) => {
-  console.log("ran1")
   if (req.method !== "POST") {
     return;
   }
@@ -14,7 +13,6 @@ const handler = async (req, res) => {
     !email.includes("@") ||
      password.trim().length < 6
   ) {
-    console.log("ran2")
     res.status(402).json({
       message: "Validation error",
     });

@@ -10,7 +10,6 @@ import { addCart } from '../../redux/userSlice'
 import db from '../../utils/db'
 
 function ProductScreen({productEle}) {
-  console.log("this is the product", productEle)
     const router = useRouter()
  const dispatch  = useDispatch()  
  const cart = useSelector(state => state.user.cart)

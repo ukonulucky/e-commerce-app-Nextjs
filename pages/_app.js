@@ -8,14 +8,12 @@ import { PayPalScriptProvider } from '@paypal/react-paypal-js'
 
 function MyApp({ Component, pageProps: {session, ...pageProps} }) {
   const router = useRouter()
-console.log("this is the session", session)
   return (
     <SessionProvider session={session}>
       <PayPalScriptProvider deferLoading={true}>
       <Layout>
          {
-          Component.auth ? (
-            
+          Component.auth ? ( 
             <Auth>
               {
                  console.log("auth component")
@@ -25,9 +23,7 @@ console.log("this is the session", session)
           ):
           (
             <Component {...pageProps} />
-          )
-
-         }
+          )}
       </Layout>
       </PayPalScriptProvider>
   </SessionProvider>

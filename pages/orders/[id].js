@@ -6,6 +6,7 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { toast } from "react-toastify";
 
 function order() {
   const [{isPending}, paypalDispatch] = usePayPalScriptReducer()
@@ -15,6 +16,10 @@ function order() {
     FETCH_REQUEST: "FETCH_REQUEST",
     FETCH_SUCCESS: "FETCH_SUCCESS",
     FETCH_ERROR: "FETCH_ERROR",
+    PAY_REQUEST: "PAY_REQUEST",
+    PAY_SUCCESS: "PAY_SUCCESS",
+    PAY_FAILURE: "PAY_FAILURE",
+    PAY_RESET: "PAY_RESET"
   };
   const reducer = (state, action) => {
     switch (action.type) {
@@ -40,25 +45,59 @@ function order() {
           error: action.payload,
         };
         break;
+        case ACTIONTYPES.PAY_REQUEST:
+        return {
+          ...state,
+         loadingPay: true
+        };
+
+        break;
+        case ACTIONTYPES.PAY_SUCCESS:
+        return {
+          ...state,
+          loadingPay:false,
+          succesPay: true
+        };
+        break;
+        case ACTIONTYPES.PAY_FAILURE:
+        return {
+          ...state,
+          succesPay:false,
+          errorPay: action.payload
+         
+        };
+        break;
+        case ACTIONTYPES.PAY_RESET:
+        return {
+          ...state,
+          loadingPay: false,
+          succesPay: false,
+          errorPay: ""
+        };
+        break;
       default:
         return state;
         break;
     }
   };
-  const [{ loading, order, error }, dispatch] = useReducer(reducer, {
+  const [{ loading, order, error, succesPay, loadingPay }, dispatch] = useReducer(reducer, {
     loading: true,
     order: {},
     error: "",
   });
 
   useEffect(() => {
+    console.log("use effect ran 1")
+    console.log("order._id: " + order._id);
+    console.log("orderId: " + orderId)
+    console.log("succesPay top: " + succesPay);
+    console.log("paypalDispatch: " + paypalDispatch)
     const fetDate = async () => {
       try {
         dispatch({
           type: ACTIONTYPES.FETCH_REQUEST,
         });
         const { data } = await axios.get(`/api/orders/${orderId}`);
-        console.log("data gotten", data);
         dispatch({ type: ACTIONTYPES.FETCH_SUCCESS, payload: data });
       } catch (error) {
         dispatch({
@@ -67,9 +106,19 @@ function order() {
         });
       }
     };
-    if (!order._id || order._id !== orderId) {
+    
+    if (!order._id || succesPay || order._id !== orderId) {
+      console.log("use effect ran 2")
       fetDate();
+      if(succesPay){
+        console.log("use effect ran 3")
+        dispatch({
+          type: ACTIONTYPES.PAY_SUCCESS
+        })
+
+      }
     }else{
+      console.log("use effect ran 4")
       const loadPayPalScript = async () => {
         const {data: clientId} = await axios.get("/api/keys/paypal")
         paypalDispatch({
@@ -87,9 +136,11 @@ function order() {
       }
       loadPayPalScript();
     }
-  }, [order, orderId, paypalDispatch]);
+   
+  }, [order, orderId, succesPay, paypalDispatch]);
 
   const {
+    paidAt,
     taxPrice,
     itemPrice,
     shippingPrice,
@@ -102,6 +153,43 @@ function order() {
     orderItems,
   } = order;
 
+function createOrder (data, actions){
+    return actions.order.create({
+      purchase_units:[
+        {
+          amount: {
+            value: totalPrice
+          }
+        }
+      ] 
+    }).then(orderID => {
+      return orderID
+    })
+}
+function onApprove(data, actions) {
+  return actions.order.capture().then(async(details) => {
+try {
+  dispatch({
+    type: ACTIONTYPES.PAY_REQUEST
+  })
+  
+  const { data } = await axios.put(`/api/orders/${order._id}/pay`, details)
+  // console.log("this is the data from onAproved", data)
+  dispatch({ type : ACTIONTYPES.PAY_SUCCESS})
+  toast.success("Order was paid successfully")
+} catch (error) {
+  dispatch({
+    type: ACTIONTYPES.PAY_FAILURE, payload: getError(error)
+  })
+}
+
+  });
+}
+function onError(error) {
+  toast.error(getError(error))
+}
+// console.log("this is the successPay", succesPay,order, orderId)
+console.log("this is the loaidng",loading)
   return (
     <div>
       <Head>
@@ -223,6 +311,7 @@ function order() {
                         />
                       </div>
                     )}
+                    {loadingPay &&  <div>Loadind...</div> }
                   </li>
                 )}
               </ul>

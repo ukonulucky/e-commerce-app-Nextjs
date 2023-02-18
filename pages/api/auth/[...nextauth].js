@@ -10,7 +10,6 @@ export default NextAuth(
         },
         callbacks:{
             async jwt({token, user}){
-                console.log("this is the callback jwt user", user)
               if(user?._id) token._id = user._id;
               if(user?.isAdmin) token.isAdmin = user.isAdmin;
               console.log("this is the callback jwt token", token)
@@ -18,7 +17,7 @@ export default NextAuth(
 
             },
             async session({session,token}){
-                console.log("this is the callback session token", token)
+         
                 if(token?._id) session._id = token._id;
                 if(token?.isAdmin) session.isAdmin = token.isAdmin;
                 return session;
@@ -27,7 +26,7 @@ export default NextAuth(
         providers: [
             CredentialsProvider({
                 async authorize(credentials){
-                    console.log("from inner", credentials.email, credentials.password)
+                   
                    await db.connect()
                    const user = await userModel.findOne({
                     email: credentials.email
