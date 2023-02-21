@@ -59,7 +59,7 @@ function Header() {
                       </DropdownLink>
                       </Menu.Item>
                       <Menu.Item>
-                      <DropdownLink href="/order history" className="dropdown-link">
+                      <DropdownLink href="/orders/history" className="dropdown-link">
                         Order History
                       </DropdownLink>
                       </Menu.Item>

@@ -11,7 +11,6 @@ export default function Shipping() {
     const dispatch = useDispatch()
     const handleSubmitHandler = (data) => {
       dispatch(saveShippingAddress(data))
-      console.log("code 44 ran")
         router.push("/payment")
     }
   const userAddress = useSelector(state => state.user.shippingAddress.location)
@@ -20,7 +19,6 @@ export default function Shipping() {
     register,
     formState: { errors },
     setValue,
-    getValue,
   } = useForm();
 
   const populateFormFields = () => {

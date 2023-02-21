@@ -10,7 +10,7 @@ import CheckoutWizard from "../components/CheckoutWizard";
 import { clearCart } from "../redux/userSlice";
 import { getError } from "../utils/getError";
 
-function placeorder() {
+function Placeorder() {
   const router = useRouter();
   const dispatch =  useDispatch();
   const productInfo = useSelector((state) => state.user);
@@ -28,7 +28,7 @@ function placeorder() {
   const totalPrice = round2(itemPrice + shippingPrice + taxPrice);
 
 const [loading, setLoading] = useState(false)
-const placeOrderHandler = async (state) => {
+const placeOrderHandler = async () => {
    try {
     const {data } = await axios.post("/api/orders", {
       orderItems: productInfo.cart,
@@ -183,6 +183,6 @@ const placeOrderHandler = async (state) => {
     </div>
   );
 }
+Placeorder.auth = true
+export default Placeorder;
 
-export default placeorder;
-placeorder.auth = true;

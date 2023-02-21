@@ -8,8 +8,8 @@ import Image from "next/image";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { toast } from "react-toastify";
 
-function order() {
-  const [{isPending}, paypalDispatch] = usePayPalScriptReducer()
+function Order() {
+  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
   const { query } = useRouter();
   const orderId = query.id;
   const ACTIONTYPES = {
@@ -19,17 +19,18 @@ function order() {
     PAY_REQUEST: "PAY_REQUEST",
     PAY_SUCCESS: "PAY_SUCCESS",
     PAY_FAILURE: "PAY_FAILURE",
-    PAY_RESET: "PAY_RESET"
+    PAY_RESET: "PAY_RESET",
   };
   const reducer = (state, action) => {
     switch (action.type) {
       case ACTIONTYPES.FETCH_REQUEST:
         return {
           ...state,
+          succesPay: false,
           loading: true,
           error: "",
         };
-        break;
+        // break;
       case ACTIONTYPES.FETCH_SUCCESS:
         return {
           ...state,
@@ -37,61 +38,57 @@ function order() {
           order: action.payload,
           error: "",
         };
-        break;
+        // break;
       case ACTIONTYPES.FETCH_ERROR:
         return {
           ...state,
           loading: false,
           error: action.payload,
         };
-        break;
-        case ACTIONTYPES.PAY_REQUEST:
+        // break;
+      case ACTIONTYPES.PAY_REQUEST:
         return {
           ...state,
-         loadingPay: true
+          loadingPay: true,
         };
 
-        break;
-        case ACTIONTYPES.PAY_SUCCESS:
+        // break;
+      case ACTIONTYPES.PAY_SUCCESS:
         return {
           ...state,
-          loadingPay:false,
-          succesPay: true
+          loadingPay: false,
+          succesPay: true,
         };
-        break;
-        case ACTIONTYPES.PAY_FAILURE:
+        // break;
+      case ACTIONTYPES.PAY_FAILURE:
         return {
           ...state,
-          succesPay:false,
-          errorPay: action.payload
-         
+          succesPay: false,
+          errorPay: action.payload,
         };
-        break;
-        case ACTIONTYPES.PAY_RESET:
+        // break;
+      case ACTIONTYPES.PAY_RESET:
         return {
           ...state,
           loadingPay: false,
           succesPay: false,
-          errorPay: ""
+          errorPay: "",
         };
-        break;
+        // break;
       default:
         return state;
-        break;
+        // break;
     }
   };
-  const [{ loading, order, error, succesPay, loadingPay }, dispatch] = useReducer(reducer, {
-    loading: true,
-    order: {},
-    error: "",
-  });
+  const [{ loading, order, error, succesPay, loadingPay }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      order: {},
+      error: "",
+    });
 
   useEffect(() => {
-    console.log("use effect ran 1")
-    console.log("order._id: " + order._id);
-    console.log("orderId: " + orderId)
-    console.log("succesPay top: " + succesPay);
-    console.log("paypalDispatch: " + paypalDispatch)
+   
     const fetDate = async () => {
       try {
         dispatch({
@@ -106,38 +103,34 @@ function order() {
         });
       }
     };
-    
-    if (!order._id || succesPay || order._id !== orderId) {
-      console.log("use effect ran 2")
+
+    if (!order._id || succesPay  || order._id !== orderId) {
       fetDate();
-      if(succesPay){
-        console.log("use effect ran 3")
+      if (succesPay) {
         dispatch({
-          type: ACTIONTYPES.PAY_SUCCESS
-        })
-
-      }
-    }else{
-      console.log("use effect ran 4")
+          type: ACTIONTYPES.PAY_RESET,
+        });
+     }
+    } else {
       const loadPayPalScript = async () => {
-        const {data: clientId} = await axios.get("/api/keys/paypal")
+        const { data: clientId } = await axios.get("/api/keys/paypal");
         paypalDispatch({
-          type:"resetOptions",
-          value:{
+          type: "resetOptions",
+          value: {
             "client-id": clientId,
-            currency:"USD"
-          }
-        })
+            currency: "USD",
+          },
+        });
         paypalDispatch({
-          type:"setLoadingStatus",
-          value: "pending"
-        })
-
-      }
+          type: "setLoadingStatus",
+          value: "pending",
+        });
+      };
       loadPayPalScript();
     }
-   
   }, [order, orderId, succesPay, paypalDispatch]);
+
+  // console.log("succesPay top: 2" + succesPay);
 
   const {
     paidAt,
@@ -153,43 +146,48 @@ function order() {
     orderItems,
   } = order;
 
-function createOrder (data, actions){
-    return actions.order.create({
-      purchase_units:[
-        {
-          amount: {
-            value: totalPrice
-          }
-        }
-      ] 
-    }).then(orderID => {
-      return orderID
-    })
-}
-function onApprove(data, actions) {
-  return actions.order.capture().then(async(details) => {
-try {
-  dispatch({
-    type: ACTIONTYPES.PAY_REQUEST
-  })
-  
-  const { data } = await axios.put(`/api/orders/${order._id}/pay`, details)
-  // console.log("this is the data from onAproved", data)
-  dispatch({ type : ACTIONTYPES.PAY_SUCCESS})
-  toast.success("Order was paid successfully")
-} catch (error) {
-  dispatch({
-    type: ACTIONTYPES.PAY_FAILURE, payload: getError(error)
-  })
-}
+  function createOrder(data, actions) {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: totalPrice,
+            },
+          },
+        ],
+      })
+      .then((orderID) => {
+        return orderID;
+      });
+  }
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async (details) => {
+      try {
+        dispatch({
+          type: ACTIONTYPES.PAY_REQUEST,
+        });
 
-  });
-}
-function onError(error) {
-  toast.error(getError(error))
-}
-// console.log("this is the successPay", succesPay,order, orderId)
-console.log("this is the loaidng",loading)
+        const { data } = await axios.put(
+          `/api/orders/${order._id}/pay`,
+          details
+        );
+        // console.log("this is the data from onAproved", data)
+        dispatch({ type: ACTIONTYPES.PAY_SUCCESS });
+        toast.success("Order was paid successfully");
+      } catch (error) {
+        dispatch({
+          type: ACTIONTYPES.PAY_FAILURE,
+          payload: getError(error),
+        });
+      }
+    });
+  }
+  function onError(error) {
+    toast.error(getError(error));
+  }
+  // console.log("this is the successPay", succesPay,order, orderId)
+  console.log("this is the loaidng", loading);
   return (
     <div>
       <Head>
@@ -311,7 +309,7 @@ console.log("this is the loaidng",loading)
                         />
                       </div>
                     )}
-                    {loadingPay &&  <div>Loadind...</div> }
+                    {loadingPay && <div>Loadind...</div>}
                   </li>
                 )}
               </ul>
@@ -322,6 +320,6 @@ console.log("this is the loaidng",loading)
     </div>
   );
 }
-order.auth = true;
+Order.auth = true;
 
-export default order;
+export default Order;

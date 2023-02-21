@@ -12,7 +12,6 @@ export default NextAuth(
             async jwt({token, user}){
               if(user?._id) token._id = user._id;
               if(user?.isAdmin) token.isAdmin = user.isAdmin;
-              console.log("this is the callback jwt token", token)
               return token
 
             },
@@ -31,11 +30,9 @@ export default NextAuth(
                    const user = await userModel.findOne({
                     email: credentials.email
                    })
-                   console.log(user)
                    await db.disconnect()
                    if(user && credentials.password === user.password){
-                    console.log("code ran inner")
-                    console.log(user.name, user.email)
+                 
                     return {
                         _id: user._id,
                         name: user.name,

@@ -128,7 +128,7 @@ export async function  getServerSideProps(context) {
   const productItem = await productModel.find({
     slug: id
   }).lean()
-
+  
   return {
     props:{
       productEle: productItem ? productItem.map(i => db.converDocToObject(i)) : null

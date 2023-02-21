@@ -10,7 +10,7 @@ import productModel from "../models/Product";
 
 
 
-  function cart({productServer}) {
+  function Cart({productServer}) {
     console.log("this is the product", productServer[0]?.countInStock)
   const router = useRouter()
   const cart = useSelector((state) => state.user.cart);
@@ -129,8 +129,7 @@ import productModel from "../models/Product";
     </div>
   );
 }
-
-export default cart;
+export default Cart;
 
 export const getServerSideProps = async (context) => {
      const { slug } = context.query

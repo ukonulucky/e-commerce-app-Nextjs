@@ -21,7 +21,6 @@ function SignUp() {
     const {
 handleSubmit,
 register,
-watch,
 getValues,
 formState: {errors}
 
@@ -45,7 +44,6 @@ formState: {errors}
         toast.error(getError(error))
       }
     }
-    const myPasssowrd = watch("password")
   return (
     <div className='w-full flex justify-center items-center'>
     <Head>

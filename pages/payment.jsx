@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import CheckoutWizard from '../components/CheckoutWizard'
 import { savePaymentMethod } from '../redux/userSlice'
 
-function payment() {
+function Payment() {
     const router = useRouter()
    const address=  useSelector(state => state.user.shippingAddress.location)
    const dispatch = useDispatch()
@@ -19,8 +19,7 @@ function payment() {
         return
     }
   dispatch(savePaymentMethod(selectedPaymentMethod))
-    console.log('this is',selectedPaymentMethod)
-    toast.success("payment  method successful")
+    toast.success("payment  method choosed successfully")
     router.push("/placeorder")
 
    }
@@ -82,5 +81,5 @@ function payment() {
   )
 }
 
-export default payment
-payment.auth = true
+Payment.auth = true
+export default Payment
