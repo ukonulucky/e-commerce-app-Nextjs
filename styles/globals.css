@@ -34,3 +34,16 @@ a{
 .alert-success{
  @apply my-3 rounded-lg bg-green-100 p-3 text-green-700
 }
+
+.wrapper-class {
+  padding: 1rem;
+  border: 1px solid #ccc;
+}
+.editor-class {
+  background-color:lightgray;
+  padding: 1rem;
+  border: 1px solid #ccc;
+}
+.toolbar-class {
+  border: 1px solid #ccc;
+}

@@ -59,7 +59,7 @@ const userSlice = createSlice({
       state.cart = [...updatedCart];
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
-    reset: (state, action) => {
+    reset: (state) => {
       return {
         ...state, 
         cart: [],
